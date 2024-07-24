@@ -1,0 +1,7 @@
+python -m venv venv-emarkt
+
+source venv-emarkt/bin/activate
+
+pip install django
+
+django-admin --version
