@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpRequest
 
 def greet(request):
-    return HttpResponse('Hello World')
+    return render(request, 'greet.html')
