@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title> Emarkt - Sign Up</title>
+    <title>Emarkt - Sign Up</title>
     <style>
         body {
             display: flex;
@@ -33,6 +33,12 @@
             margin-bottom: 15px;
         }
 
+        .errorlist {
+            color: red;
+            list-style-type: none;
+            padding: 0;
+        }
+
         button {
             padding: 10px;
             border: none;
@@ -55,6 +61,18 @@
             {% csrf_token %}
             {{ form.as_p }}
             <button type="submit">Create account</button>
+            {% if form.errors %}
+                <ul class="errorlist">
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
         </form>
     </div>
 </body>
