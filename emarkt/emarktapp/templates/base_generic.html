@@ -1,0 +1,27 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}My E-Market{% endblock %}</title>
+</head>
+<body>
+    <header>
+        <h1>Welcome to My E-Market</h1>
+        <nav>
+            <ul>
+                <li><a href="{% url 'product_list' %}">Home</a></li>
+                <li><a href="{% url 'product_new' %}">Add New Product</a></li>
+                <li><a href="{% url 'login' %}">Login</a></li>
+                <li><a href="{% url 'sign_up' %}">Sign Up</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+    <footer>
+        <p>&copy; 2024 My E-Market</p>
+    </footer>
+</body>
+</html>

@@ -1,12 +1,56 @@
 # emarktapp/views.py
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import HttpResponse
-from .forms import SignUpForm
+
+from .models import Product
+from .forms import ProductForm, SignUpForm
 from .forms import LoginForm
 def greet(request):
     return render(request, 'greet.html')
+
+# -------- Products  --------
+
+@login_required
+def product_list(request):
+    products = Product.objects.all()
+    return render(request, 'product_list.html', {'products': products})
+
+@login_required
+def product_detail(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    return render(request, 'product_detail.html', {'product': product})
+
+@login_required
+def product_new(request):
+    if request.method == "POST":
+        form = ProductForm(request.POST)
+        if form.is_valid():
+            product = form.save(commit=False)
+            product.owner = request.user
+            product.save()
+            return redirect('product_detail', pk=product.pk)
+    else:
+        form = ProductForm()
+    return render(request, 'product_edit.html', {'form': form})
+
+@login_required
+def product_edit(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    if request.method == "POST":
+        form = ProductForm(request.POST, instance=product)
+        if form.is_valid():
+            product = form.save(commit=False)
+            product.owner = request.user
+            product.save()
+            return redirect('product_detail', pk=product.pk)
+    else:
+        form = ProductForm(instance=product)
+    return render(request, 'product_edit.html', {'form': form})
+
+# -------- Auth  --------
 
 def sign_up(request):
     if request.method == "POST":
@@ -39,7 +83,7 @@ def login_view(request):
             
             if user is not None:
                 login(request, user)
-                return redirect('success')  # Redirect to a success page after login
+                return redirect('product_list')  # Redirect to a success page after login
             else:
                 form.add_error(None, "Invalid username/email or password")
     else:
