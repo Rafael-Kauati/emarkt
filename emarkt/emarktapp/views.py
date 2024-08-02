@@ -39,15 +39,19 @@ def product_new(request):
 @login_required
 def product_edit(request, pk):
     product = get_object_or_404(Product, pk=pk)
-    if request.method == "POST":
+    
+    # Ensure the current user is the owner of the product
+    if product.owner != request.user:
+        return redirect('product_detail', pk=pk)
+    
+    if request.method == 'POST':
         form = ProductForm(request.POST, instance=product)
         if form.is_valid():
-            product = form.save(commit=False)
-            product.owner = request.user
-            product.save()
+            form.save()
             return redirect('product_detail', pk=product.pk)
     else:
         form = ProductForm(instance=product)
+    
     return render(request, 'product_edit.html', {'form': form})
 
 # -------- Auth  --------

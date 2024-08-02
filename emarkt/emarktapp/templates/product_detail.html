@@ -5,5 +5,7 @@
   <p>{{ product.description }}</p>
   <p>Price: ${{ product.price }}</p>
   <p>Stock: {{ product.stock }}</p>
-  <a href="{% url 'product_edit' product.pk %}">Edit</a>
+  {% if user.is_authenticated and product.owner == user %}
+    <a href="{% url 'product_edit' product.pk %}">Edit</a>
+  {% endif %}
 {% endblock %}
