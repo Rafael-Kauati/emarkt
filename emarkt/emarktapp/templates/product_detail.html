@@ -1,11 +1,69 @@
-{% extends "base_generic.html" %}
-
-{% block content %}
-  <h2>{{ product.name }}</h2>
-  <p>{{ product.description }}</p>
-  <p>Price: ${{ product.price }}</p>
-  <p>Stock: {{ product.stock }}</p>
-  {% if user.is_authenticated and product.owner == user %}
-    <a href="{% url 'product_edit' product.pk %}">Edit</a>
-  {% endif %}
-{% endblock %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{{ product.name }} - My Marketplace</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 20px;
+        }
+        .product-detail-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .product-detail-container h2 {
+            margin-top: 0;
+        }
+        .product-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .edit-button {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        .edit-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>My Marketplace</h1>
+        <!-- Navigation and other header content -->
+    </header>
+    
+    <main>
+        <div class="product-detail-container">
+            <h2>{{ product.name }}</h2>
+            <img src="https://www.aaronfaber.com/wp-content/uploads/2017/03/product-placeholder-wp.jpg" alt="{{ product.name }}" class="product-image">
+            <p>{{ product.description }}</p>
+            <p>Price: ${{ product.price }}</p>
+            <p>Stock: {{ product.stock }}</p>
+            <p>Posted at: {{ product.created_at|date:"F j, Y, g:i a" }}</p>
+            {% if user.is_authenticated and product.owner == user %}
+                <a href="{% url 'product_edit' product.pk %}" class="edit-button">Edit</a>
+            {% endif %}
+        </div>
+    </main>
+    
+    <footer>
+        <!-- Footer content -->
+    </footer>
+</body>
+</html>
